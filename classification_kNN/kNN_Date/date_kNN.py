@@ -155,3 +155,31 @@ def showdatas(datingDataMat, datingLabels):
 	#show the image
 	plt.show()
 
+
+def autoNorm(dataSet):
+	"""
+	Function: datasets normalization
+	Parameters:
+		dataSet - features matrix
+	Returns:
+		normDataSet - normalized features matrix 
+		ranges - range of the feature`s values
+		minVals - minimum value 
+	Modify:
+		2018-12-9
+	"""
+	#get the minimum and maximum value
+	minVals = dataSet.min(0)
+	maxVals = dataSet.max(0)
+	#range between the minimum and maximum
+	ranges = maxVals - minVals
+	#shape(dataSet) return rows and columns number of dataSet matrix
+	normDataSet = np.zeros(np.shape(dataSet))
+	#rows number
+	m = dataSet.shape[0]
+	#minus the minimum value
+	normDataSet = dataSet - np.tile(minVals, (m, 1))
+	#devided by range ,get normalized value
+	normDataSet = normDataSet / np.tile(ranges, (m, 1))
+	#return normalized value,range ,minimum vlaue
+	return normDataSet, ranges, minVals
