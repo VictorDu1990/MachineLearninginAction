@@ -183,3 +183,70 @@ def autoNorm(dataSet):
 	normDataSet = normDataSet / np.tile(ranges, (m, 1))
 	#return normalized value,range ,minimum vlaue
 	return normDataSet, ranges, minVals
+
+
+def datingClassifyTest():
+	"""
+	Function: classifier tester
+	Parameters:
+		none
+	Returns:
+		none
+	Modify:
+		2018-12-9
+	"""
+	#open datasets file
+	filename = "datingTestSet.txt"
+	#get the features and labels
+	datingDataMat, datingLabels = file2matrix(filename)
+	#get 10% dataset use for test
+	hoRatio = 0.10
+	#return normalized value,range ,minimum vlaue
+	normMat, ranges, minVals = autoNorm(datingDataMat)
+	
+	m = normMat.shape[0]
+	#numbers of the 10% dataset use for test 
+	numTestVecs = int(m * hoRatio)
+	#classify error counter
+	errorCount = 0.0
+
+	for i in range(numTestVecs):
+		#split test datasets and training datasets
+		classifierResult = classify0(normMat[i,:], normMat[numTestVecs:m,:], 
+			datingLabels[numTestVecs:m], 4)
+		print("classify result:%s\t real labels:%d" % (classifierResult, datingLabels[i]))
+		if classifierResult != datingLabels[i]:
+			errorCount += 1.0
+	print("error ratio: %f%%" %(errorCount/float(numTestVecs)*100))
+
+
+def classifyPerson():
+	"""
+	Function:input 3-d feature to classify
+	Parameters:
+		none
+	Returns:
+		none
+	Modify:
+		2018-12-9
+	"""
+	#labels
+	resultList = ['dislike','like','verylike']
+	#input 3-d feature
+	precentTats = float(input("Time consumption ratio of video games(%): "))
+	ffMiles = float(input("Flight mileage obtained annually(km):"))
+	iceCream = float(input("Ice Cream Consumption Weekly(L):"))
+	#open datasets
+	filename = "datingTestSet.txt"
+	#data preprocessing
+	datingDataMat, datingLabels = file2matrix(filename)
+	#datasrets normalization
+	normMat, ranges, minVals = autoNorm(datingDataMat)
+	#get test sets
+	inArr = np.array([ffMiles, precentTats, iceCream])
+	#testing 
+	norminArr = (inArr - minVals) / ranges
+	#get the class label
+	classifierResult = classify0(norminArr, normMat, datingLabels, 3)
+	#print the result
+	print("you might %s this person." % (resultList[classifierResult-1]))
