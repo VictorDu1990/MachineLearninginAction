@@ -9,7 +9,7 @@ import operator
 
 
 def classify0(inX, dataSet, labels, k):
-  """
+  	"""
 	Function: kNN algorithm classifier
 	Parameters:
 		inX - testing datasets
@@ -88,3 +88,70 @@ def file2matrix(filename):
 			classLabelVector.append(3)
 		index += 1
 	return returnMat, classLabelVector
+
+def showdatas(datingDataMat, datingLabels):
+	
+	"""
+	Function:Data visualization
+	Parameters:
+		datingDataMat - the features matrix
+		datingLabels - classifications Labels
+	Returns:
+		none
+	Modify:
+		2018-12-9
+	"""
+	fig, axs = plt.subplots(nrows=2, ncols=2,sharex=False, sharey=False, figsize=(13,8))
+
+	numberOfLabels = len(datingLabels)
+	LabelsColors = []
+	for i in datingLabels:
+		if i == 1:
+			LabelsColors.append('black')
+		if i == 2:
+			LabelsColors.append('orange')
+		if i == 3:
+			LabelsColors.append('red')
+	#plot scatter
+	axs[0][0].scatter(x=datingDataMat[:,0], y=datingDataMat[:,1], color=LabelsColors,s=15, alpha=.5)
+	#set title,x_axis label,y_axis label
+	axs0_title_text = axs[0][0].set_title('Flight mileage obtained annually && Time consumption ratio of video games(%)')
+	axs0_xlabel_text = axs[0][0].set_xlabel('Flight mileage obtained annually(km)')
+	axs0_ylabel_text = axs[0][0].set_ylabel('Time consumption ratio of video games(%)')
+	plt.setp(axs0_title_text, size=9, weight='bold', color='red')  
+	plt.setp(axs0_xlabel_text, size=7, weight='bold', color='black')  
+	plt.setp(axs0_ylabel_text, size=7, weight='bold', color='black') 
+
+	#plot scatter
+	axs[0][1].scatter(x=datingDataMat[:,0], y=datingDataMat[:,2], color=LabelsColors,s=15, alpha=.5)
+	#set title,x_axis label,y_axis label
+	axs1_title_text = axs[0][1].set_title('Flight mileage obtained annually(km) && Ice Cream Consumption Weekly(L)')
+	axs1_xlabel_text = axs[0][1].set_xlabel('Flight mileage obtained annually(km)')
+	axs1_ylabel_text = axs[0][1].set_ylabel('Ice Cream Consumption Weekly(L)')
+	plt.setp(axs1_title_text, size=9, weight='bold', color='red')  
+	plt.setp(axs1_xlabel_text, size=7, weight='bold', color='black')  
+	plt.setp(axs1_ylabel_text, size=7, weight='bold', color='black') 
+
+	#plot scatter
+	axs[1][0].scatter(x=datingDataMat[:,1], y=datingDataMat[:,2], color=LabelsColors,s=15, alpha=.5)
+	#set title,x_axis label,y_axis label
+	axs2_title_text = axs[1][0].set_title('Time consumption ratio of video games(%) && Ice Cream Consumption Weekly(L)')
+	axs2_xlabel_text = axs[1][0].set_xlabel('Time consumption ratio of video games(%)',)
+	axs2_ylabel_text = axs[1][0].set_ylabel('Ice Cream Consumption Weekly(L)')
+	plt.setp(axs2_title_text, size=9, weight='bold', color='red')  
+	plt.setp(axs2_xlabel_text, size=7, weight='bold', color='black')  
+	plt.setp(axs2_ylabel_text, size=7, weight='bold', color='black') 
+	#set legend
+	didntLike = mlines.Line2D([], [], color='black', marker='.',
+                      markersize=6, label='didntLike')
+	smallDoses = mlines.Line2D([], [], color='orange', marker='.',
+	                  markersize=6, label='smallDoses')
+	largeDoses = mlines.Line2D([], [], color='red', marker='.',
+	                  markersize=6, label='largeDoses')
+	#add legend
+	axs[0][0].legend(handles=[didntLike,smallDoses,largeDoses])
+	axs[0][1].legend(handles=[didntLike,smallDoses,largeDoses])
+	axs[1][0].legend(handles=[didntLike,smallDoses,largeDoses])
+	#show the image
+	plt.show()
+
