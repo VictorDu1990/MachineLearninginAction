@@ -65,7 +65,7 @@ def file2matrix(filename):
 	#Read all the contents of the file
 	arrayOLines = fr.readlines()
 	#remove BOM if it does have.
-  arrayOLines[0]=arrayOLines[0].lstrip('\ufeff')
+  	arrayOLines[0]=arrayOLines[0].lstrip('\ufeff')
 	#get the lines numbers of the file
 	numberOfLines = len(arrayOLines)
 
