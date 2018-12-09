@@ -250,3 +250,7 @@ def classifyPerson():
 	classifierResult = classify0(norminArr, normMat, datingLabels, 3)
 	#print the result
 	print("you might %s this person." % (resultList[classifierResult-1]))
+	
+	
+if __name__ == '__main__':
+	datingClassTest()
