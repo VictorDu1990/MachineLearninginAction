@@ -143,29 +143,49 @@ def createTree(dataSet, labels, featLabels):
 	for value in uniqueVals:									#foreach features，Create decision tree					
 		myTree[bestFeatLabel][value] = createTree(splitDataSet(dataSet, bestFeat, value), labels, featLabels)
 	return myTree
-	
-def getNumLeafs(myTree):
-	'''
-	get the total numbers of leaf node
-	'''
-    numLeafs = 0	
-	# firstStr = list(myTree.keys())[0]
-    firstStr = next(iter(myTree))								
-    secondDict = myTree[firstStr]								
-    for key in secondDict.keys():
-        if type(secondDict[key]).__name__=='dict':				
-            numLeafs += getNumLeafs(secondDict[key])
-        else:   numLeafs +=1
-    return numLeafs
 
-def getTreeDepth(myTree):
-	# get the tree depth 
-    maxDepth = 0												
-    firstStr = next(iter(myTree))								
-    secondDict = myTree[firstStr]							
-    for key in secondDict.keys():
-        if type(secondDict[key]).__name__=='dict':			
-            thisDepth = 1 + getTreeDepth(secondDict[key])
-        else:   thisDepth = 1
-        if thisDepth > maxDepth: maxDepth = thisDepth		
-    return maxDepth
+
+def classify(inputTree, featLabels, testVec):
+'''
+Function: use decision tree to classify.
+Parameters:
+	inputTree - produced decision tree
+	featLabels - best feature labels
+	testVec - testsets list
+Returns:
+	classLabel - predict class 
+Modify:
+	2018-12-11
+'''
+	firstStr = next(iter(inputTree))														#获取决策树结点
+	secondDict = inputTree[firstStr]														#下一个字典
+	featIndex = featLabels.index(firstStr)												
+	for key in secondDict.keys():
+		if testVec[featIndex] == key:
+			if type(secondDict[key]).__name__ == 'dict':
+				classLabel = classify(secondDict[key], featLabels, testVec)
+			else: classLabel = secondDict[key]
+	return classLabel
+
+def storeTree(inputTree, filename):
+	# save tree to file
+	with open(filename, 'wb') as fw:
+		pickle.dump(inputTree, fw)
+
+ 
+def grabTree(filename):
+	# read the decision  tree file 
+	fr = open(filename, 'rb')
+	return pickle.load(fr)
+
+
+if __name__ == '__main__':
+	dataSet, labels = createDataSet()
+	featLabels = []
+	myTree = createTree(dataSet, labels, featLabels)
+	testVec = [0,1,0,0]										# test data
+	result = classify(myTree, featLabels, testVec)
+	if result == 'yes':
+		print('Lending')
+	if result == 'no':
+		print('No lending')
