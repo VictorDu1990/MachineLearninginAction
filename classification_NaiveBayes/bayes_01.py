@@ -4,6 +4,15 @@ from functools import reduce
 
 
 def loadDataSet():
+'''
+Function: Create simple dataset
+Parameter: none
+Return:  
+	postingList: postings
+	classVec: calss of the postings
+Modify:
+	2018-12-18
+'''
 	postingList=[['my', 'dog', 'has', 'flea', 'problems', 'help', 'please'],				
 				['maybe', 'not', 'take', 'him', 'to', 'dog', 'park', 'stupid'],
 				['my', 'dalmation', 'is', 'so', 'cute', 'I', 'love', 'him'],
