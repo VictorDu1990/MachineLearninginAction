@@ -23,6 +23,7 @@ Modify:
 	return postingList,classVec	
 	
 def createVocabList(dataSet):
+	# create vocabulary list that not repeat
 	vocabSet = set([])  					
 	for document in dataSet:				
 		vocabSet = vocabSet | set(document) 
