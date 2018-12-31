@@ -74,7 +74,7 @@ def calcEk(oS, k):
 	Modify:
 		2018-12-31
 	'''
-	fXk = float(np.multiply(oS.alphas,oS.labelMat).T*(oS.X*oS.X[k,:].T) + oS.b)
+	fXk = float(np.multiply(oS.alphas,oS.labelMat).T*oS.K[:,k] + oS.b)
 	Ek = fXk - float(oS.labelMat[k])
 	return Ek
 
@@ -153,7 +153,7 @@ def innerL(i, oS):
 			print("L==H")
 			return 0
 		#Step 3: Calculate ETA
-		eta = 2.0 * oS.X[i,:] * oS.X[j,:].T - oS.X[i,:] * oS.X[i,:].T - oS.X[j,:] * oS.X[j,:].T
+		eta = 2.0 * oS.K[i,j] - oS.K[i,i] - oS.K[j,j]
 		if eta >= 0: 
 			print("eta>=0")
 			return 0
@@ -171,8 +171,8 @@ def innerL(i, oS):
 		#Update Ei to Error Cache
 		updateEk(oS, i)
 		#Step 7: Update b_1 and b_2
-		b1 = oS.b - Ei- oS.labelMat[i]*(oS.alphas[i]-alphaIold)*oS.X[i,:]*oS.X[i,:].T - oS.labelMat[j]*(oS.alphas[j]-alphaJold)*oS.X[i,:]*oS.X[j,:].T
-		b2 = oS.b - Ej- oS.labelMat[i]*(oS.alphas[i]-alphaIold)*oS.X[i,:]*oS.X[j,:].T - oS.labelMat[j]*(oS.alphas[j]-alphaJold)*oS.X[j,:]*oS.X[j,:].T
+		b1 = oS.b - Ei- oS.labelMat[i]*(oS.alphas[i]-alphaIold)*oS.K[i,i] - oS.labelMat[j]*(oS.alphas[j]-alphaJold)*oS.K[i,j]
+		b2 = oS.b - Ej- oS.labelMat[i]*(oS.alphas[i]-alphaIold)*oS.K[i,j]- oS.labelMat[j]*(oS.alphas[j]-alphaJold)*oS.K[j,j]
 		#Step 8: Update B according to b_1 and b_2
 		if (0 < oS.alphas[i]) and (oS.C > oS.alphas[i]): oS.b = b1
 		elif (0 < oS.alphas[j]) and (oS.C > oS.alphas[j]): oS.b = b2
